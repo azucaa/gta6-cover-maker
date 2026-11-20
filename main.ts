@@ -11,7 +11,7 @@
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -37,4 +37,29 @@ writeFileSync(
     app_max_bytes: 50331648,
     app_path_max_bytes: 1000,
   }),
+);
+
+// NEON PALMS addition: a one-line size report after the hand-in, so a local
+// run shows at a glance that the output sits inside the scorer's caps.
+function measureTree(dir) {
+  let files = 0;
+  let bytes = 0;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const sub = measureTree(path);
+      files += sub.files;
+      bytes += sub.bytes;
+    } else {
+      files += 1;
+      bytes += statSync(path).size;
+    }
+  }
+  return { files, bytes };
+}
+const appMeasure = measureTree(join(out, 'app'));
+const shotMeasure = measureTree(join(out, 'screenshots'));
+console.log(
+  `neon-palms hand-in: app ${appMeasure.files} files / ${appMeasure.bytes} bytes, ` +
+  `screenshots ${shotMeasure.files} files / ${shotMeasure.bytes} bytes, dossier written`,
 );

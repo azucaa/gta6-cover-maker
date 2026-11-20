@@ -3,20 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>NEON PALMS — Poster Cover Maker</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+  <section class="stage-wrap">
+    <canvas id="stage" width="1280" height="720" aria-label="Cover preview"></canvas>
+    <p class="hint">Click a panel to select it, drag to move its photo, scroll to zoom.</p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+  <aside class="controls">
+    <h1>NEON <span>PALMS</span></h1>
+    <p class="tagline">Your photo, a caption, a poster cover. Photos never leave this machine.</p>
+
+    <div class="group">
+      <h2>Photos</h2>
+      <label class="file-btn">Add photos<input id="photo-files" type="file" accept="image/*" multiple hidden></label>
+      <div id="tray" class="tray" aria-label="Loaded photos"></div>
+      <div class="row">
+        <button id="fill-all" type="button">Fill all panels</button>
+        <button id="clear-panel" type="button">Clear panel</button>
+      </div>
+      <label class="slider">Panel zoom <input id="zoom" type="range" min="50" max="300" value="100"></label>
+    </div>
+
+    <div class="group">
+      <h2>Layout</h2>
+      <div class="seg" id="layouts">
+        <button type="button" data-layout="grid" class="on">Syndicate Grid</button>
+        <button type="button" data-layout="slash">Slash</button>
+        <button type="button" data-layout="hero">Hero + Strips</button>
+        <button type="button" data-layout="quad">Quad</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Colour grade</h2>
+      <div class="seg" id="grades">
+        <button type="button" data-grade="sunset" class="on">Sunset Vice</button>
+        <button type="button" data-grade="neon">Neon Night</button>
+        <button type="button" data-grade="golden">Golden Hour</button>
+        <button type="button" data-grade="noir">Noir</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Caption</h2>
+      <textarea id="caption" rows="2" maxlength="42">PALM CITY
+HEAT</textarea>
+      <input id="sub" type="text" maxlength="48" value="A NEON PALMS STORY" aria-label="Sub-caption">
+    </div>
+
+    <div class="group">
+      <h2>Canvas size</h2>
+      <div class="seg" id="previews">
+        <button type="button" data-preview="1080x1080">Square</button>
+        <button type="button" data-preview="1080x1350">Portrait</button>
+        <button type="button" data-preview="1920x1080" class="on">Wide</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Export PNG</h2>
+      <div class="row">
+        <button type="button" class="export" data-size="1080x1080">1080 × 1080</button>
+        <button type="button" class="export" data-size="1080x1350">1080 × 1350</button>
+        <button type="button" class="export" data-size="1920x1080">1920 × 1080</button>
+      </div>
+      <p id="status" role="status"></p>
+    </div>
+  </aside>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
